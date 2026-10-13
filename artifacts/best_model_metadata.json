@@ -1,0 +1,27 @@
+{
+    "best_algorithm": "SVM RBF",
+    "selection_metric": "mean_cv_f1",
+    "cv_scoring": "f1",
+    "cv_folds": 5,
+    "best_cv_f1": 0.4597632218213638,
+    "best_parameters": {
+        "model__C": 0.1,
+        "model__class_weight": "balanced",
+        "model__gamma": "scale"
+    },
+    "test_metrics": {
+        "test_accuracy": 0.7380952380952381,
+        "test_precision": 0.43529411764705883,
+        "test_recall": 0.8409090909090909,
+        "test_f1": 0.5736434108527132
+    },
+    "dataset_file": "C02_loan_approval_classification.xlsx - Raw_Data.csv",
+    "test_size": 0.2,
+    "random_state": 42,
+    "scikit_learn_version": "1.9.1",
+    "class_distribution_after_cleaning": {
+        "0": 831,
+        "1": 219
+    },
+    "artifact_file": "best_model.joblib"
+}

@@ -1,0 +1,38 @@
+{
+  "shape": {
+    "rows": 1062,
+    "columns": 8
+  },
+  "dtypes": {
+    "applicant_id": "str",
+    "income_monthly": "float64",
+    "debt_monthly": "float64",
+    "credit_score": "float64",
+    "employment_years": "float64",
+    "loan_amount": "float64",
+    "home_status": "str",
+    "approved": "int64"
+  },
+  "missing_values": {
+    "applicant_id": 0,
+    "income_monthly": 2,
+    "debt_monthly": 6,
+    "credit_score": 4,
+    "employment_years": 6,
+    "loan_amount": 7,
+    "home_status": 3,
+    "approved": 0
+  },
+  "duplicate_rows": 12,
+  "outlier_counts_iqr": {
+    "income_monthly": 6,
+    "debt_monthly": 7,
+    "credit_score": 3,
+    "employment_years": 5,
+    "loan_amount": 3
+  },
+  "target_distribution": {
+    "0": 842,
+    "1": 220
+  }
+}

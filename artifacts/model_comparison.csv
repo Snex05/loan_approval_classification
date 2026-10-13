@@ -1,0 +1,6 @@
+Algorithm,Best CV F1,Test Accuracy,Test Precision,Test Recall,Test F1,Best Parameters
+SVM RBF,0.4597632218213638,0.7380952380952381,0.43529411764705883,0.8409090909090909,0.5736434108527132,"{""model__C"": 0.1, ""model__class_weight"": ""balanced"", ""model__gamma"": ""scale""}"
+SVM Linear,0.45142718313552344,0.7142857142857143,0.4069767441860465,0.7954545454545454,0.5384615384615384,"{""model__C"": 10, ""model__class_weight"": ""balanced""}"
+Decision Tree,0.42695377931268974,0.6333333333333333,0.3333333333333333,0.75,0.46153846153846156,"{""model__class_weight"": ""balanced"", ""model__criterion"": ""gini"", ""model__max_depth"": 3, ""model__min_samples_leaf"": 1, ""model__min_samples_split"": 2}"
+KNN,0.31179510055388276,0.7857142857142857,0.47368421052631576,0.20454545454545456,0.2857142857142857,"{""model__metric"": ""manhattan"", ""model__n_neighbors"": 3, ""model__weights"": ""uniform""}"
+Naive Bayes,0.2659236744343127,0.7952380952380952,0.5454545454545454,0.13636363636363635,0.21818181818181817,"{""model__var_smoothing"": 1e-11}"
