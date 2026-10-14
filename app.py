@@ -206,23 +206,8 @@ def model_comparison() -> None:
         "Test Recall",
         "Test F1",
     ]
-    numeric_columns = columns[1:]
-    styled_comparison = (
-        comparison[columns]
-        .style.format({column: "{:.4f}" for column in numeric_columns})
-        .apply(
-            lambda row: [
-                "font-weight: 700"
-                if pd.notna(value) and value == row.max()
-                else ""
-                for value in row
-            ],
-            subset=numeric_columns,
-            axis=1,
-        )
-    )
     st.dataframe(
-        styled_comparison,
+        comparison[columns].style.format({column: "{:.4f}" for column in columns[1:]}),
         width="stretch",
         hide_index=True,
     )
