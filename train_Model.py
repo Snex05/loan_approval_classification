@@ -37,10 +37,10 @@ from sklearn.tree import DecisionTreeClassifier
 
 # STEP 1: Import Library และกำหนดค่าที่ใช้ในโปรเจกต์
 DATA_FILE = "C02_loan_approval_classification.xlsx - Raw_Data.csv"
-RANDOM_STATE = 42
-TEST_SIZE = 0.20
-CV_FOLDS = 5
-SCORING = "f1"
+RANDOM_STATE = 42 #กำหนด Random State เพื่อให้ผลลัพธ์ซ้ำได้
+TEST_SIZE = 0.20 #แบ่งข้อมูล 20% เป็น Test Set
+CV_FOLDS = 5 #กำหนด Cross-validation จำนวน 5 folds
+SCORING = "f1" #ใช้ F1 Score เป็นเกณฑ์ประเมินผล
 
 # เก็บไฟล์ผลลัพธ์ทั้งหมดไว้ในโฟลเดอร์ artifacts
 ARTIFACTS_DIR = Path("artifacts")
@@ -82,19 +82,19 @@ print(df.head())
 
 
 # STEP 3: Data Understanding
-print("\nShape ของข้อมูล =", df.shape)
+print("\nShape ของข้อมูล =", df.shape) #ดูจำนวนแถวและคอลัมน์ของ DataFrame
 
 print("\nโครงสร้างข้อมูล")
-df.info()
+df.info() #ดูข้อมูลแต่ละคอลัมน์ว่ามีชนิดข้อมูลอะไรบ้าง และมี Missing Values หรือไม่
 
 print("\nจำนวน Missing Values")
-print(df.isnull().sum())
+print(df.isnull().sum()) #ดูจำนวน Missing Values ของแต่ละคอลัมน์
 
-print("\nจำนวนข้อมูลซ้ำ =", df.duplicated().sum())
+print("\nจำนวนข้อมูลซ้ำ =", df.duplicated().sum()) #ดูจำนวนข้อมูลซ้ำ
 
-print("\nการกระจายของ Target (approved)")
-print(df["approved"].value_counts())
-print(df["approved"].value_counts(normalize=True) * 100)
+print("\nการกระจายของ Target (approved)") #ดูการกระจายของ Target Variable
+print(df["approved"].value_counts()) # แสดงจำนวนข้อมูลในแต่ละคลาส
+print(df["approved"].value_counts(normalize=True) * 100) # แสดงเปอร์เซ็นต์ของข้อมูลในแต่ละคลาส
 
 
 # STEP 4: Data Cleaning
@@ -163,6 +163,88 @@ plt.savefig("boxplot_outliers.png", dpi=300)
 plt.close()
 
 print("บันทึก Box Plot แล้วที่ boxplot_outliers.png")
+
+
+# สร้าง Histogram เพื่อดูการกระจายของแต่ละ Numerical Feature
+figure, axes = plt.subplots(3, 2, figsize=(14, 12))
+axes = axes.ravel()
+
+for axis, feature in zip(axes, NUMERIC_FEATURES):
+    axis.hist(df[feature].dropna(), bins=20, color="#2f80ed", edgecolor="white")
+    axis.set_title(f"Distribution of {feature}")
+    axis.set_xlabel(feature)
+    axis.set_ylabel("Frequency")
+    axis.grid(axis="y", alpha=0.25)
+
+axes[-1].axis("off")
+figure.suptitle("Histograms of Numerical Features", fontsize=16)
+figure.tight_layout()
+figure.savefig("histograms_features.png", dpi=300)
+plt.close(figure)
+print("บันทึก Histogram แล้วที่ histograms_features.png")
+
+
+# สร้าง Correlation Heatmap ระหว่าง Numerical Features
+correlation = df[NUMERIC_FEATURES].corr()
+figure, axis = plt.subplots(figsize=(10, 8))
+heatmap = axis.imshow(
+    correlation,
+    cmap="coolwarm",
+    vmin=-1,
+    vmax=1,
+)
+
+axis.set_xticks(range(len(NUMERIC_FEATURES)))
+axis.set_yticks(range(len(NUMERIC_FEATURES)))
+axis.set_xticklabels(NUMERIC_FEATURES, rotation=45, ha="right")
+axis.set_yticklabels(NUMERIC_FEATURES)
+axis.set_title("Correlation Heatmap of Numerical Features")
+
+for row in range(len(NUMERIC_FEATURES)):
+    for column in range(len(NUMERIC_FEATURES)):
+        axis.text(
+            column,
+            row,
+            f"{correlation.iloc[row, column]:.2f}",
+            ha="center",
+            va="center",
+            color="black",
+        )
+
+figure.colorbar(heatmap, ax=axis, label="Correlation")
+figure.tight_layout()
+figure.savefig("correlation_heatmap.png", dpi=300)
+plt.close(figure)
+print("บันทึก Correlation Heatmap แล้วที่ correlation_heatmap.png")
+
+
+# สร้าง Box Plot แยก Numerical Features ตามค่า Target (approved)
+target_values = sorted(df["approved"].dropna().unique())
+figure, axes = plt.subplots(3, 2, figsize=(14, 12))
+axes = axes.ravel()
+
+for axis, feature in zip(axes, NUMERIC_FEATURES):
+    grouped_values = [
+        df.loc[df["approved"] == target_value, feature].dropna()
+        for target_value in target_values
+    ]
+    axis.boxplot(grouped_values)
+    axis.set_xticks(range(1, len(target_values) + 1))
+    axis.set_xticklabels([str(value) for value in target_values])
+    axis.set_title(f"{feature} by approved")
+    axis.set_xlabel("approved")
+    axis.set_ylabel(feature)
+    axis.grid(axis="y", alpha=0.25)
+
+axes[-1].axis("off")
+figure.suptitle("Numerical Features by Loan Approval", fontsize=16)
+figure.tight_layout()
+figure.savefig("boxplot_features_by_approved.png", dpi=300)
+plt.close(figure)
+print(
+    "บันทึก Box Plot แยกตาม approved แล้วที่ "
+    "boxplot_features_by_approved.png"
+)
 
 
 # STEP 6: Remove Unnecessary Feature
